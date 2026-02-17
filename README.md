@@ -10,16 +10,29 @@ A machine learning-based system for predicting housing prices in Izmir, Turkey, 
 
 > Originally developed for the "Introduction to Artificial Intelligence" course.
 
+**Quick Overview:** ML-powered housing price predictor with 87%+ accuracy, custom luxury scoring algorithm, interactive Streamlit UI, and modular architecture with comprehensive logging and error handling.
+
+**Quick Overview:** ML-powered housing price predictor with 87%+ accuracy, custom luxury scoring algorithm, interactive Streamlit UI. Production-inspired architecture: modular structure, logging, and error handling.
+
 ## ✨ Features
 
 - 🎯 **Modular Architecture:** Professional-grade code organization
 - 📊 **Advanced Data Analysis:** Comprehensive EDA and visualization tools
 - 🤖 **Machine Learning:** High-performance HistGradientBoostingRegressor
-- 💎 **Luxury Score:** Proprietary algorithm for property valuation
+- 💎 **Luxury Score:** Custom-built feature engineering algorithm for property valuation
 - 🎨 **Modern UI:** Interactive web interface built with Streamlit
 - 📝 **Logging System:** Professional logging infrastructure
 - ⚙️ **Configuration Management:** YAML-based configuration
 - ✅ **Testing Support:** Unit tests for code quality assurance
+
+## 💎 How the Luxury Score Works
+
+The custom-built algorithm evaluates properties beyond just price per square meter. It factors in the district's prestige, building age, and room-to-area ratio to categorize properties from standard to ultra-luxury tiers.
+
+## 📸 Application Screenshots
+
+![Live Prediction App](docs/images/Live-Prediction-App.png)
+*Interactive Streamlit interface for real-time housing price predictions*
 
 ## 👤 Developer
 
@@ -219,45 +232,7 @@ izmir-housing-price-ml/
 
 ## 🎯 Usage
 
-### Training the Model
-
-```bash
-# Using Make
-make train
-
-# Or directly
-python model_egitim.py
-```
-
-### Running the Application
-
-```bash
-# Using Make
-make run
-
-# Or directly
-streamlit run app.py
-```
-
-### Running Tests
-
-```bash
-# Using Make
-make test
-
-# Or directly
-pytest tests/ -v
-```
-
-### Code Quality
-
-```bash
-# Check code quality
-make lint
-
-# Auto-format code
-make format
-```
+Refer to the Quick Start section above for detailed setup and running instructions.
 
 ## 📊 Model Performance
 
@@ -292,30 +267,16 @@ All configuration settings are in `config/config.yaml`:
 - Luxury score parameters
 - Logging settings
 
-## 📝 Code Standards
+## 📝 Production-Inspired Architecture & Code Quality
 
-This project follows professional software engineering practices:
+This project follows production-inspired practices with modular architecture, comprehensive logging, and error handling:
 
-- ✅ **Type Hints:** Full type annotation support
-- ✅ **Docstrings:** Comprehensive documentation
-- ✅ **Modular Architecture:** Clean separation of concerns
-- ✅ **Error Handling:** Robust exception management
-- ✅ **Logging:** Structured logging system
-- ✅ **Testing:** Unit test coverage
-- ✅ **Configuration Management:** YAML-based config
-- ✅ **Code Formatting:** Black + isort
-- ✅ **Linting:** Ruff for code quality
-- ✅ **CI/CD:** GitHub Actions pipeline
-- ✅ **Pre-commit Hooks:** Automated quality checks
-- ✅ **Dependency Pinning:** Reproducible builds
-
-### Code Quality Tools
-
-- **Black:** Code formatting (line length: 100)
-- **isort:** Import sorting
-- **Ruff:** Fast Python linter
-- **pytest:** Testing framework
-- **pre-commit:** Git hooks for quality assurance
+* **Architecture & Config:** Clean, modular separation of concerns with robust YAML-based configuration management.
+* **Quality Assurance:** Comprehensive unit testing (`pytest`) and automated CI/CD pipelines via GitHub Actions.
+* **Code Quality & Styling:** Automated formatting (`Black`, `isort`), fast linting (`Ruff`), and enforced `pre-commit` hooks.
+* **Type Safety & Docs:** Fully annotated with Python type hints and comprehensive docstrings across all modules.
+* **Reliability:** Custom exception handling and structured logging implemented across the entire ML pipeline.
+* **Reproducibility:** Strict dependency pinning for consistent environments.
 
 ### Running Quality Checks
 
@@ -367,6 +328,5 @@ Log files are stored in the `logs/` directory. The directory is created automati
 
 ---
 
-**Version:** 2.0.0  
+**Version:** 1.0.0  
 **Last Updated:** 2026
-
