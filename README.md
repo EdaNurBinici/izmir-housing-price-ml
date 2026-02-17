@@ -101,6 +101,8 @@ pip install -r requirements-dev.txt
 pre-commit install
 ```
 
+> **Note:** All dependencies are pinned to exact versions for reproducibility. See [DEPENDENCY_MANAGEMENT.md](DEPENDENCY_MANAGEMENT.md) for update procedures.
+
 #### 4. Train the Model
 
 ```bash
