@@ -2,6 +2,7 @@
 Model Eğitim Scripti - Senior Seviyesinde Refactor Edilmiş Versiyon
 Bu dosya, src/train_model.py modülünü kullanarak model eğitimini başlatır.
 """
+
 import sys
 from pathlib import Path
 
