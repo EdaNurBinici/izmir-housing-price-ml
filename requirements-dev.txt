@@ -1,4 +1,4 @@
-﻿-r requirements.txt
+-r requirements.txt
 
 black==26.1.0
 isort==7.0.0
