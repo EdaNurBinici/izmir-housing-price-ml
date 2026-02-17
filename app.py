@@ -133,28 +133,33 @@ if menu == "1. Proje Hakkında & Amaç":
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("🎯 Projenin Amacı")
-        st.write("""
+        st.write(
+            """
         Bu projenin temel amacı, İzmir ilindeki konutların özelliklerine (ilçe, m², oda sayısı vb.)
         dayanarak piyasa değerini tahmin eden ve konutun **'Lüks Statüsünü'** analiz eden
         yapay zeka tabanlı bir sistem geliştirmektir.
-        """)
+        """
+        )
     with col2:
         st.subheader("🛠️ Kullanılan Teknolojiler")
-        st.markdown("""
+        st.markdown(
+            """
         * **Python:** Ana programlama dili
         * **Scikit-learn:** Makine öğrenmesi (Gradient Boosting)
         * **Pandas & Seaborn:** Veri analizi ve görselleştirme
         * **Streamlit:** İnteraktif web arayüzü
         * **YAML:** Yapılandırma yönetimi
         * **Logging:** Gelişmiş log sistemi
-        """)
+        """
+        )
 
     st.info(
         "💡 **Neden İzmir?** Veri çeşitliliği ve kalitesi (6.000+ satır) açısından model eğitimine en uygun şehir olduğu için seçilmiştir."
     )
 
     with st.expander("📋 Proje Yapısı"):
-        st.code("""
+        st.code(
+            """
 Konut_Projesi/
 ├── src/              # Kaynak kod modülleri
 ├── config/           # Yapılandırma dosyaları
@@ -163,7 +168,8 @@ Konut_Projesi/
 ├── app.py            # Streamlit uygulaması
 ├── model_egitim.py   # Model eğitim scripti
 └── requirements.txt  # Bağımlılıklar
-        """)
+        """
+        )
 
 # --- 2. BÖLÜM: VERİ ÖN İŞLEME ---
 elif menu == "2. Veri Ön İşleme Süreci":
@@ -175,28 +181,36 @@ elif menu == "2. Veri Ön İşleme Süreci":
     with st.expander("Neden ve Nasıl Yaptık?", expanded=True):
         c1, c2 = st.columns(2)
         with c1:
-            st.info("""
+            st.info(
+                """
             **✂️ Train-Test Ayrımı (%80 / %20)**
             * **Neden?** Model eğitildiği veriyi ezberleyebilir.
             * **Çözüm:** Görmediği veriyle test edilmelidir.
             * **Akademik:** "Model performansı, eğitim verisi dışında kalan test verisi üzerinde ölçülmüştür."
-            """)
-            st.info("""
+            """
+            )
+            st.info(
+                """
             **⚠️ Outlier (Aykırı Değer) Temizliği**
             * **Neden?** Aşırı pahalı/ucuz evler RMSE'yi şişirir ve modeli yanıltır.
             * **Akademik:** "Aykırı değerler, modelin genelleme kabiliyetini düşürdüğü için temizlenmiştir."
-            """)
+            """
+            )
         with c2:
-            st.success("""
+            st.success(
+                """
             **📍 One-Hot Encoding**
             * **Neden?** Model "Çankaya", "Buca" gibi metinleri anlamaz.
             * **Çözüm:** İlçeler 0-1 matrisine dönüştürüldü. Label Encoding yapılmadı çünkü ilçeler arasında matematiksel bir üstünlük yok.
-            """)
-            st.success("""
+            """
+            )
+            st.success(
+                """
             **📏 StandardScaler**
             * **Neden?** Fiyat (Milyonlar) ile Oda Sayısı (3-5) aynı ölçekte değil.
             * **Çözüm:** Hepsi standart ölçeğe getirildi, böylece model ağırlıkları adil dağıttı.
-            """)
+            """
+            )
 
     st.divider()
 
@@ -375,24 +389,30 @@ elif menu == "5. Model Performansı":
     with st.expander("🚀 NEDEN BU MODELİ VE TEKNİKLERİ SEÇTİK?", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.warning("""
+            st.warning(
+                """
             **🔹 Gradient Boosting**
             * **Neden?** Basit bir regresyon çizgisi değil.
             * **Farkı:** Karmaşık ilişkileri (Semt-Fiyat dengesi vb.) öğrenir.
             * **Sonuç:** Model daha 'akıllı' oldu ve hataları azalttı.
-            """)
+            """
+            )
         with col2:
-            st.warning("""
+            st.warning(
+                """
             **🔹 Target Encoding (İlçe Skoru)**
             * **Ne Yaptık?** İlçeyi sadece 0-1 değil, "Değer Skoru" olarak öğrettik.
             * **Sonuç:** Model, Çeşme'nin Buca'dan değerli olduğunu matematiksel olarak anladı.
-            """)
+            """
+            )
         with col3:
-            st.warning("""
+            st.warning(
+                """
             **🔹 Logaritmik Dönüşüm**
             * **Neden?** Fiyatlar (Milyonlar) ile Oda Sayısı (3) arasında uçurum vardı.
             * **Sonuç:** Fiyatları dengeleyerek modelin büyük sayılarda boğulmasını engelledik.
-            """)
+            """
+            )
 
     st.divider()
 
@@ -424,10 +444,12 @@ elif menu == "5. Model Performansı":
     st.divider()
 
     if r2_degeri < 0.65:
-        st.warning("""
+        st.warning(
+            """
         **💡 Analiz Notu:** R2 Skorunun mevcut seviyesi, emlak piyasasındaki **"İnsan Faktörü"**nü gösterir.
         Manzara, evin içi yapısı, acil satılık durumu gibi veri setinde olmayan özellikler fiyatı etkilemektedir.
-        """)
+        """
+        )
 
     st.subheader("🧠 Modelin Karar Mekanizması")
 
@@ -462,7 +484,8 @@ elif menu == "5. Model Performansı":
 # --- 6. BÖLÜM: SONUÇ ---
 elif menu == "6. Sonuç & Kazanımlar":
     st.title("🏁 Proje Değerlendirmesi ve Sonuç")
-    st.info("""
+    st.info(
+        """
     ### 📝 Proje Çıktıları
     Yapay Zekaya Giriş dersi kapsamında geliştirdiğim bu projede, teorik bilgilerimi pratiğe dökme fırsatı buldum. Temel kazanımlarım:
 
@@ -471,7 +494,8 @@ elif menu == "6. Sonuç & Kazanımlar":
     3. **Özgün Katma Değer:** "Lüks Skoru" algoritması ile projeye farklı bir boyut kazandırıldı.
     4. **Kullanıcı Deneyimi:** Proje, son kullanıcıya hitap eden bir web uygulamasına dönüştürüldü.
     5. **Kod Kalitesi:** Senior seviyesinde modüler yapı, logging ve error handling ile profesyonel bir proje oluşturuldu.
-    """)
+    """
+    )
     st.write("---")
     st.success("Projemin sunumu burada sona ermiştir. Dinlediğin için teşekkür ederim! 👏")
     if st.button("Kutlama Yap 🎉"):
