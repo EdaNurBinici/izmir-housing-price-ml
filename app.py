@@ -1,6 +1,6 @@
 """
-İzmir Konut Projesi - Streamlit Uygulaması
-Senior seviyesinde refactor edilmiş versiyon
+Izmir Housing Project - Streamlit Application
+Senior-level refactored version
 """
 
 import sys
@@ -16,7 +16,7 @@ import numpy as np
 import seaborn as sns
 import streamlit as st
 
-# Proje modüllerini import et
+# Import project modules
 from src.config_loader import ConfigLoader
 from src.data_processor import DataProcessor
 from src.logger_setup import get_logger, setup_logging
@@ -25,31 +25,31 @@ from src.model_loader import ModelLoader
 from src.predictor import PricePredictor
 from src.validators import InputValidator
 
-# Logging'i başlat
+# Initialize logging
 setup_logging(log_level="INFO", log_file="logs/app.log")
 logger = get_logger(__name__)
 
-# Config yükle
+# Load config
 try:
     config = ConfigLoader("config/config.yaml")
 except Exception as e:
-    st.error(f"⚠️ Config dosyası yüklenemedi: {e}")
+    st.error(f"⚠️ Config file could not be loaded: {e}")
     st.stop()
 
-# Streamlit sayfa ayarları
+# Streamlit page settings
 st.set_page_config(
-    page_title=config.get("streamlit.page_title", "İzmir Konut Projesi Sunumu"),
+    page_title=config.get("streamlit.page_title", "Izmir Housing Project Presentation"),
     layout=config.get("streamlit.layout", "wide"),
     initial_sidebar_state=config.get("streamlit.sidebar_state", "expanded"),
 )
 
 
-# Model ve veri yükleme
+# Model and data loading
 @st.cache_resource
 def initialize_app():
-    """Uygulamayı başlatır ve gerekli nesneleri yükler"""
+    """Initializes the application and loads necessary objects"""
     try:
-        logger.info("Uygulama başlatılıyor...")
+        logger.info("Application starting...")
 
         # Model loader
         model_loader = ModelLoader(config)
@@ -74,7 +74,7 @@ def initialize_app():
         # Data processor
         data_processor = DataProcessor(config)
 
-        logger.info("Uygulama başarıyla başlatıldı")
+        logger.info("Application started successfully")
 
         return {
             "model_loader": model_loader,
@@ -84,16 +84,16 @@ def initialize_app():
         }
 
     except Exception as e:
-        logger.error(f"Uygulama başlatma hatası: {e}")
+        logger.error(f"Application initialization error: {e}")
         return None
 
 
-# Uygulamayı başlat
+# Start the application
 app_data = initialize_app()
 
 if app_data is None:
-    st.error("⚠️ Dosyalar eksik! Lütfen 'model_egitim.py' kodunu çalıştırın.")
-    st.info("💡 Terminal'de şu komutu çalıştırın: `python model_egitim.py`")
+    st.error("⚠️ Files are missing! Please run 'model_egitim.py'.")
+    st.info("💡 Run this command in terminal: `python model_egitim.py`")
     st.stop()
 
 model_loader = app_data["model_loader"]
@@ -101,30 +101,30 @@ predictor = app_data["predictor"]
 data_processor = app_data["data_processor"]
 config = app_data["config"]
 
-# Yan menü
-st.sidebar.title("📌 Proje Sunum Menüsü")
+# Sidebar menu
+st.sidebar.title("📌 Project Presentation Menu")
 
 menu = st.sidebar.radio(
-    "Bölümler:",
+    "Sections:",
     [
-        "1. Proje Hakkında & Amaç",
-        "2. Veri Ön İşleme Süreci",
-        "3. Gelişmiş Veri Analizi (EDA)",
-        "4. Canlı Uygulama (Demo)",
-        "5. Model Performansı",
-        "6. Sonuç & Kazanımlar",
+        "1. About the Project & Objective",
+        "2. Data Preprocessing Process",
+        "3. Advanced Data Analysis (EDA)",
+        "4. Live Application (Demo)",
+        "5. Model Performance",
+        "6. Conclusion & Outcomes",
     ],
 )
 
 st.sidebar.divider()
 project_info = config.get("project", {})
 st.sidebar.caption(
-    f"**Developer:** Eda Nur BİNİCİ\n\n**Course:** {project_info.get('course', 'Yapay Zekaya Giriş')}"
+    f"**Developer:** Eda Nur BİNİCİ\n\n**Course:** {project_info.get('course', 'Introduction to Artificial Intelligence')}"
 )
 
-# --- 1. BÖLÜM: PROJE HAKKINDA ---
-if menu == "1. Proje Hakkında & Amaç":
-    st.title(f"🏠 {project_info.get('name', 'İzmir Konut Projesi')}")
+# --- SECTION 1: ABOUT THE PROJECT ---
+if menu == "1. About the Project & Objective":
+    st.title(f"🏠 {project_info.get('name', 'Izmir Housing Project')}")
     st.image(
         "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         use_container_width=True,
@@ -132,154 +132,154 @@ if menu == "1. Proje Hakkında & Amaç":
 
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("🎯 Projenin Amacı")
+        st.subheader("🎯 Project Objective")
         st.write(
             """
-        Bu projenin temel amacı, İzmir ilindeki konutların özelliklerine (ilçe, m², oda sayısı vb.)
-        dayanarak piyasa değerini tahmin eden ve konutun **'Lüks Statüsünü'** analiz eden
-        yapay zeka tabanlı bir sistem geliştirmektir.
+        The main objective of this project is to develop an artificial intelligence-based system 
+        that predicts the market value of residential properties in Izmir based on their features 
+        (district, area, number of rooms, etc.) and analyzes the property's **'Luxury Status'**.
         """
         )
     with col2:
-        st.subheader("🛠️ Kullanılan Teknolojiler")
+        st.subheader("🛠️ Technologies Used")
         st.markdown(
             """
-        * **Python:** Ana programlama dili
-        * **Scikit-learn:** Makine öğrenmesi (Gradient Boosting)
-        * **Pandas & Seaborn:** Veri analizi ve görselleştirme
-        * **Streamlit:** İnteraktif web arayüzü
-        * **YAML:** Yapılandırma yönetimi
-        * **Logging:** Gelişmiş log sistemi
+        * **Python:** Main programming language
+        * **Scikit-learn:** Machine learning (Gradient Boosting)
+        * **Pandas & Seaborn:** Data analysis and visualization
+        * **Streamlit:** Interactive web interface
+        * **YAML:** Configuration management
+        * **Logging:** Advanced logging system
         """
         )
 
     st.info(
-        "💡 **Neden İzmir?** Veri çeşitliliği ve kalitesi (6.000+ satır) açısından model eğitimine en uygun şehir olduğu için seçilmiştir."
+        "💡 **Why Izmir?** It was selected as the most suitable city for model training in terms of data diversity and quality (6,000+ rows)."
     )
 
-    with st.expander("📋 Proje Yapısı"):
+    with st.expander("📋 Project Structure"):
         st.code(
             """
-Konut_Projesi/
-├── src/              # Kaynak kod modülleri
-├── config/           # Yapılandırma dosyaları
-├── tests/            # Test dosyaları
-├── logs/             # Log dosyaları
-├── app.py            # Streamlit uygulaması
-├── model_egitim.py   # Model eğitim scripti
-└── requirements.txt  # Bağımlılıklar
+Housing_Project/
+├── src/              # Source code modules
+├── config/           # Configuration files
+├── tests/            # Test files
+├── logs/             # Log files
+├── app.py            # Streamlit application
+├── model_egitim.py   # Model training script
+└── requirements.txt  # Dependencies
         """
         )
 
-# --- 2. BÖLÜM: VERİ ÖN İŞLEME ---
-elif menu == "2. Veri Ön İşleme Süreci":
-    st.title("🛠️ Veri Ön İşleme ve Temizlik")
+# --- SECTION 2: DATA PREPROCESSING ---
+elif menu == "2. Data Preprocessing Process":
+    st.title("🛠️ Data Preprocessing and Cleaning")
     st.markdown(
-        "Yapay zeka modelinin başarısı için ham veriyi doğrudan kullanmadık. Aşağıdaki işlemlerden geçirdik:"
+        "For the success of the AI model, we didn't use raw data directly. We processed it through the following steps:"
     )
 
-    with st.expander("Neden ve Nasıl Yaptık?", expanded=True):
+    with st.expander("Why and How We Did It?", expanded=True):
         c1, c2 = st.columns(2)
         with c1:
             st.info(
                 """
-            **✂️ Train-Test Ayrımı (%80 / %20)**
-            * **Neden?** Model eğitildiği veriyi ezberleyebilir.
-            * **Çözüm:** Görmediği veriyle test edilmelidir.
-            * **Akademik:** "Model performansı, eğitim verisi dışında kalan test verisi üzerinde ölçülmüştür."
+            **✂️ Train-Test Split (80% / 20%)**
+            * **Why?** The model can memorize the training data.
+            * **Solution:** It must be tested with unseen data.
+            * **Academic:** "Model performance was measured on test data separate from the training data."
             """
             )
             st.info(
                 """
-            **⚠️ Outlier (Aykırı Değer) Temizliği**
-            * **Neden?** Aşırı pahalı/ucuz evler RMSE'yi şişirir ve modeli yanıltır.
-            * **Akademik:** "Aykırı değerler, modelin genelleme kabiliyetini düşürdüğü için temizlenmiştir."
+            **⚠️ Outlier Removal**
+            * **Why?** Extremely expensive/cheap houses inflate RMSE and mislead the model.
+            * **Academic:** "Outliers were removed as they reduce the model's generalization capability."
             """
             )
         with c2:
             st.success(
                 """
             **📍 One-Hot Encoding**
-            * **Neden?** Model "Çankaya", "Buca" gibi metinleri anlamaz.
-            * **Çözüm:** İlçeler 0-1 matrisine dönüştürüldü. Label Encoding yapılmadı çünkü ilçeler arasında matematiksel bir üstünlük yok.
+            * **Why?** The model doesn't understand texts like "Çankaya", "Buca".
+            * **Solution:** Districts were converted to 0-1 matrix. Label Encoding was not used because there's no mathematical superiority between districts.
             """
             )
             st.success(
                 """
             **📏 StandardScaler**
-            * **Neden?** Fiyat (Milyonlar) ile Oda Sayısı (3-5) aynı ölçekte değil.
-            * **Çözüm:** Hepsi standart ölçeğe getirildi, böylece model ağırlıkları adil dağıttı.
+            * **Why?** Price (Millions) and Room Count (3-5) are not on the same scale.
+            * **Solution:** All were brought to standard scale, so the model distributed weights fairly.
             """
             )
 
     st.divider()
 
-    st.subheader("1. Ham Veri (Raw Data)")
+    st.subheader("1. Raw Data")
     df = model_loader.raw_df
-    st.write(f"Veri setinin ilk hali **{len(df)} satır** veriden oluşmaktadır.")
+    st.write(f"The initial state of the dataset consists of **{len(df)} rows** of data.")
     st.dataframe(df.head(3))
 
     st.divider()
 
-    st.subheader("2. Aykırı Değer Temizliği")
+    st.subheader("2. Outlier Removal")
 
     outlier_stats = data_processor.get_outlier_stats(df)
 
     col1, col2 = st.columns(2)
     with col1:
-        st.error("📉 Atılan Veriler")
+        st.error("📉 Removed Data")
         st.write(
-            f"- Fiyatı {outlier_stats['price_max']:,} TL üzeri veya {outlier_stats['price_min']:,} TL altı olanlar."
+            f"- Properties with price above {outlier_stats['price_max']:,} TL or below {outlier_stats['price_min']:,} TL."
         )
         st.write(
-            f"- Metrekaresi {outlier_stats['area_max']} m² üzeri veya {outlier_stats['area_min']} m² altı olanlar."
+            f"- Properties with area above {outlier_stats['area_max']} m² or below {outlier_stats['area_min']} m²."
         )
         st.metric(
-            "Temizlenen Satır",
-            f"{outlier_stats['atilan_satir']} Adet",
-            delta="-Gürültü",
+            "Cleaned Rows",
+            f"{outlier_stats['atilan_satir']} Items",
+            delta="-Noise",
             delta_color="inverse",
         )
 
     with col2:
-        st.success("✅ Kalan Temiz Veri")
-        st.write("Model eğitiminde ve grafiklerde kullanılan, güvenilir veri seti.")
-        st.metric("Eğitime Giren Veri", f"{outlier_stats['kalan_satir']} Adet", "Kaliteli")
+        st.success("✅ Remaining Clean Data")
+        st.write("Reliable dataset used in model training and visualizations.")
+        st.metric("Training Data", f"{outlier_stats['kalan_satir']} Items", "Quality")
 
-# --- 3. BÖLÜM: EDA ---
-elif menu == "3. Gelişmiş Veri Analizi (EDA)":
-    st.title("📊 Gelişmiş Keşifçi Veri Analizi (EDA)")
+# --- SECTION 3: EDA ---
+elif menu == "3. Advanced Data Analysis (EDA)":
+    st.title("📊 Advanced Exploratory Data Analysis (EDA)")
 
     clean_df = data_processor.prepare_eda_data(model_loader.raw_df)
 
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📉 Fiyat Analizi", "📏 M² & Regresyon", "🏙️ İlçe Analizleri", "🔥 Karmaşıklık Matrisi"]
+        ["📉 Price Analysis", "📏 Area & Regression", "🏙️ District Analysis", "🔥 Correlation Matrix"]
     )
 
     with tab1:
         col1, col2 = st.columns(2)
         with col1:
-            st.subheader("1. Standart Fiyat Dağılımı")
+            st.subheader("1. Standard Price Distribution")
             fig1, ax1 = plt.subplots(figsize=(10, 6))
             sns.histplot(clean_df["price"], kde=True, color="blue", ax=ax1)
-            plt.xlabel("Fiyat (TL)")
-            plt.ylabel("Frekans")
+            plt.xlabel("Price (TL)")
+            plt.ylabel("Frequency")
             st.pyplot(fig1)
-            st.caption("Fiyatlar sağa çarpık dağılıyor.")
+            st.caption("Prices are right-skewed.")
 
         with col2:
-            st.subheader("2. Logaritmik Fiyat Dağılımı")
+            st.subheader("2. Logarithmic Price Distribution")
             fig_log, ax_log = plt.subplots(figsize=(10, 6))
             sns.histplot(np.log1p(clean_df["price"]), kde=True, color="purple", bins=30, ax=ax_log)
-            plt.xlabel("Log(Fiyat)")
-            plt.ylabel("Frekans")
+            plt.xlabel("Log(Price)")
+            plt.ylabel("Frequency")
             st.pyplot(fig_log)
             st.info(
-                "💡 **Analiz:** Logaritmik dönüşümle veri Normal Dağılıma (Çan Eğrisi) yaklaşmıştır."
+                "💡 **Analysis:** With logarithmic transformation, the data approaches Normal Distribution (Bell Curve)."
             )
 
     with tab2:
-        st.subheader("3. Metrekare - Fiyat İlişkisi (Regresyon)")
+        st.subheader("3. Area - Price Relationship (Regression)")
         fig2, ax2 = plt.subplots(figsize=(12, 6))
         sns.regplot(
             x="area",
@@ -289,36 +289,36 @@ elif menu == "3. Gelişmiş Veri Analizi (EDA)":
             line_kws={"color": "red"},
             ax=ax2,
         )
-        plt.xlabel("Metrekare (m²)")
-        plt.ylabel("Fiyat (TL)")
+        plt.xlabel("Area (m²)")
+        plt.ylabel("Price (TL)")
         plt.grid(True, linestyle="--", alpha=0.5)
         st.pyplot(fig2)
         st.info(
-            "💡 **Analiz:** Kırmızı çizgi, metrekare arttıkça fiyatın genel artış eğilimini gösterir."
+            "💡 **Analysis:** The red line shows the general upward trend of price as area increases."
         )
 
     with tab3:
-        st.subheader("4. İlçe Bazlı Fiyat Değişkenliği (Boxplot)")
+        st.subheader("4. District-Based Price Variability (Boxplot)")
         order = clean_df.groupby("district")["price"].median().sort_values(ascending=False).index
         fig_box, ax_box = plt.subplots(figsize=(14, 7))
         sns.boxplot(
             x="district", y="price", data=clean_df, order=order, palette="viridis", ax=ax_box
         )
         plt.xticks(rotation=45, ha="right")
-        plt.ylabel("Fiyat (TL)")
+        plt.ylabel("Price (TL)")
         st.pyplot(fig_box)
 
         st.divider()
-        st.subheader("5. Metrekare Başına En Değerli İlçeler")
+        st.subheader("5. Most Valuable Districts per Square Meter")
         ilce_m2_deger = (
             clean_df.groupby("district")["m2_fiyat"].mean().sort_values(ascending=False).head(10)
         )
         st.bar_chart(ilce_m2_deger)
 
     with tab4:
-        st.subheader("6. Korelasyon Matrisi (Heatmap)")
+        st.subheader("6. Correlation Matrix (Heatmap)")
         numeric_df = clean_df[["price", "area", "age", "toplam_oda", "m2_fiyat"]]
-        numeric_df.columns = ["Fiyat", "Metrekare", "Bina Yaşı", "Oda Sayısı", "m² Değeri"]
+        numeric_df.columns = ["Price", "Area", "Building Age", "Room Count", "Price per m²"]
 
         fig_corr, ax_corr = plt.subplots(figsize=(10, 8))
         sns.heatmap(
@@ -332,22 +332,22 @@ elif menu == "3. Gelişmiş Veri Analizi (EDA)":
         )
         st.pyplot(fig_corr)
 
-# --- 4. BÖLÜM: DEMO ---
-elif menu == "4. Canlı Uygulama (Demo)":
-    st.title("🚀 Canlı Tahmin Uygulaması")
+# --- SECTION 4: DEMO ---
+elif menu == "4. Live Application (Demo)":
+    st.title("🚀 Live Prediction Application")
 
     with st.container(border=True):
         col1, col2 = st.columns(2)
         with col1:
-            ilce = st.selectbox("📍 İlçe", model_loader.ilce_listesi)
-            ev_tipi = st.selectbox("🏠 Ev Tipi", model_loader.ev_tipleri)
-            m2 = st.number_input("📏 Net Metrekare", 50, 1000, 120)
+            ilce = st.selectbox("📍 District", model_loader.ilce_listesi)
+            ev_tipi = st.selectbox("🏠 Property Type", model_loader.ev_tipleri)
+            m2 = st.number_input("📏 Net Area (m²)", 50, 1000, 120)
         with col2:
-            oda = st.number_input("🚪 Oda Sayısı", 1, 10, 3)
-            salon = st.number_input("🛋️ Salon Sayısı", 1, 5, 1)
-            yas = st.number_input("🏗️ Bina Yaşı", 0, 100, 5)
+            oda = st.number_input("🚪 Number of Rooms", 1, 10, 3)
+            salon = st.number_input("🛋️ Number of Living Rooms", 1, 5, 1)
+            yas = st.number_input("🏗️ Building Age", 0, 100, 5)
 
-        btn = st.button("✨ Hesapla", type="primary")
+        btn = st.button("✨ Calculate", type="primary")
 
     if btn:
         try:
@@ -358,12 +358,12 @@ elif menu == "4. Canlı Uygulama (Demo)":
             st.divider()
             c1, c2 = st.columns([1.5, 1])
             with c1:
-                st.subheader("💰 Tahmini Değer")
+                st.subheader("💰 Estimated Value")
                 st.success(f"# {result['tahmini_fiyat']:,} TL")
             with c2:
-                st.subheader("💎 Lüks Skoru")
+                st.subheader("💎 Luxury Score")
                 st.metric(
-                    label="Prestij Puanı",
+                    label="Prestige Score",
                     value=f"{result['luxury_score']}/100",
                     delta=result["luxury_category"],
                 )
@@ -372,45 +372,45 @@ elif menu == "4. Canlı Uygulama (Demo)":
 
             if result["luxury_score"] == 100:
                 st.balloons()
-                st.success("🏆 TEBRİKLER! Bölgenin en prestijli konutu.")
+                st.success("🏆 CONGRATULATIONS! The most prestigious property in the area.")
 
-            # Detayları göster
-            with st.expander("📊 Detaylı Analiz"):
+            # Show details
+            with st.expander("📊 Detailed Analysis"):
                 st.json(result["luxury_details"])
 
         except Exception as e:
-            logger.error(f"Tahmin hatası: {e}")
-            st.error(f"❌ Hata: {e}")
+            logger.error(f"Prediction error: {e}")
+            st.error(f"❌ Error: {e}")
 
-# --- 5. BÖLÜM: PERFORMANS ---
-elif menu == "5. Model Performansı":
-    st.title("📈 Model Performans Analizi")
+# --- SECTION 5: PERFORMANCE ---
+elif menu == "5. Model Performance":
+    st.title("📈 Model Performance Analysis")
 
-    with st.expander("🚀 NEDEN BU MODELİ VE TEKNİKLERİ SEÇTİK?", expanded=True):
+    with st.expander("🚀 WHY DID WE CHOOSE THIS MODEL AND TECHNIQUES?", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
             st.warning(
                 """
             **🔹 Gradient Boosting**
-            * **Neden?** Basit bir regresyon çizgisi değil.
-            * **Farkı:** Karmaşık ilişkileri (Semt-Fiyat dengesi vb.) öğrenir.
-            * **Sonuç:** Model daha 'akıllı' oldu ve hataları azalttı.
+            * **Why?** Not just a simple regression line.
+            * **Difference:** Learns complex relationships (District-Price balance, etc.).
+            * **Result:** Model became 'smarter' and reduced errors.
             """
             )
         with col2:
             st.warning(
                 """
-            **🔹 Target Encoding (İlçe Skoru)**
-            * **Ne Yaptık?** İlçeyi sadece 0-1 değil, "Değer Skoru" olarak öğrettik.
-            * **Sonuç:** Model, Çeşme'nin Buca'dan değerli olduğunu matematiksel olarak anladı.
+            **🔹 Target Encoding (District Score)**
+            * **What We Did?** We taught the district not just as 0-1, but as a "Value Score".
+            * **Result:** The model mathematically understood that Çeşme is more valuable than Buca.
             """
             )
         with col3:
             st.warning(
                 """
-            **🔹 Logaritmik Dönüşüm**
-            * **Neden?** Fiyatlar (Milyonlar) ile Oda Sayısı (3) arasında uçurum vardı.
-            * **Sonuç:** Fiyatları dengeleyerek modelin büyük sayılarda boğulmasını engelledik.
+            **🔹 Logarithmic Transformation**
+            * **Why?** There was a huge gap between Prices (Millions) and Room Count (3).
+            * **Result:** By balancing prices, we prevented the model from drowning in large numbers.
             """
             )
 
@@ -420,22 +420,22 @@ elif menu == "5. Model Performansı":
     r2_degeri = metrikler.get("R2 Skoru", 0)
 
     if r2_degeri > 0.85:
-        yorum = "Mükemmel 🌟"
+        yorum = "Excellent 🌟"
         renk = "normal"
     elif r2_degeri > 0.65:
-        yorum = "Çok İyi ✅"
+        yorum = "Very Good ✅"
         renk = "normal"
     elif r2_degeri > 0.50:
-        yorum = "Kabul Edilebilir (Orta) ⚠️"
+        yorum = "Acceptable (Medium) ⚠️"
         renk = "off"
     else:
-        yorum = "Geliştirilmeli 🔻"
+        yorum = "Needs Improvement 🔻"
         renk = "inverse"
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("R2 Skoru (Doğruluk)", f"{r2_degeri:.3f}", yorum, delta_color=renk)
+    c1.metric("R² Score (Accuracy)", f"{r2_degeri:.3f}", yorum, delta_color=renk)
     c2.metric(
-        "MAE (Hata)", f"{int(metrikler.get('MAE (Ortalama Hata)', 0)):,} TL", delta_color="inverse"
+        "MAE (Error)", f"{int(metrikler.get('MAE (Ortalama Hata)', 0)):,} TL", delta_color="inverse"
     )
     c3.metric(
         "RMSE", f"{int(metrikler.get('RMSE (Kök Ortalama Hata)', 0)):,} TL", delta_color="inverse"
@@ -446,57 +446,57 @@ elif menu == "5. Model Performansı":
     if r2_degeri < 0.65:
         st.warning(
             """
-        **💡 Analiz Notu:** R2 Skorunun mevcut seviyesi, emlak piyasasındaki **"İnsan Faktörü"**nü gösterir.
-        Manzara, evin içi yapısı, acil satılık durumu gibi veri setinde olmayan özellikler fiyatı etkilemektedir.
+        **💡 Analysis Note:** The current level of R² Score shows the **"Human Factor"** in the real estate market.
+        Features not in the dataset such as view, interior structure, urgent sale status affect the price.
         """
         )
 
-    st.subheader("🧠 Modelin Karar Mekanizması")
+    st.subheader("🧠 Model's Decision Mechanism")
 
     try:
         grafik_verisi = model_loader.onem_duzeyleri.copy()
 
         def isim_duzelt(metin: str) -> str:
-            """Özellik isimlerini düzeltir"""
+            """Corrects feature names"""
             if "district_" in metin:
-                return metin.replace("district_", "") + " İlçesi"
+                return metin.replace("district_", "") + " District"
             elif "left_" in metin:
-                return metin.replace("left_", "") + " (Ev Tipi)"
+                return metin.replace("left_", "") + " (Property Type)"
             elif metin == "area":
-                return "Metrekare (m²)"
+                return "Area (m²)"
             elif metin == "age":
-                return "Bina Yaşı"
+                return "Building Age"
             elif metin == "toplam_oda":
-                return "Oda Sayısı"
+                return "Room Count"
             elif metin == "ilce_skoru":
-                return "İlçe Değeri"
+                return "District Value"
             return metin
 
         if "Özellik" in grafik_verisi.columns:
             grafik_verisi["Özellik"] = grafik_verisi["Özellik"].apply(isim_duzelt)
             st.bar_chart(grafik_verisi.set_index("Özellik"))
         else:
-            st.write("Özellik önem grafiği mevcut değil.")
+            st.write("Feature importance chart is not available.")
     except Exception as e:
-        logger.warning(f"Grafik oluşturma hatası: {e}")
-        st.write("Model karmaşıklığı nedeniyle özellik önem grafiği bu modelde gösterilemiyor.")
+        logger.warning(f"Chart creation error: {e}")
+        st.write("Due to model complexity, the feature importance chart cannot be displayed in this model.")
 
-# --- 6. BÖLÜM: SONUÇ ---
-elif menu == "6. Sonuç & Kazanımlar":
-    st.title("🏁 Proje Değerlendirmesi ve Sonuç")
+# --- SECTION 6: CONCLUSION ---
+elif menu == "6. Conclusion & Outcomes":
+    st.title("🏁 Project Evaluation and Conclusion")
     st.info(
         """
-    ### 📝 Proje Çıktıları
-    Yapay Zekaya Giriş dersi kapsamında geliştirdiğim bu projede, teorik bilgilerimi pratiğe dökme fırsatı buldum. Temel kazanımlarım:
+    ### 📝 Project Outputs
+    In this project developed within the scope of the Introduction to Artificial Intelligence course, I had the opportunity to put my theoretical knowledge into practice. My main achievements:
 
-    1. **Veri Analizi:** İzmir emlak verileri temizlendi ve analiz edildi.
-    2. **Yüksek Doğruluk:** Gelişmiş algoritmalar ile başarılı tahminler elde edildi.
-    3. **Özgün Katma Değer:** "Lüks Skoru" algoritması ile projeye farklı bir boyut kazandırıldı.
-    4. **Kullanıcı Deneyimi:** Proje, son kullanıcıya hitap eden bir web uygulamasına dönüştürüldü.
-    5. **Kod Kalitesi:** Modüler yapı, logging ve error handling kullanıldı.
+    1. **Data Analysis:** Izmir real estate data was cleaned and analyzed.
+    2. **High Accuracy:** Successful predictions were obtained with advanced algorithms.
+    3. **Original Added Value:** A different dimension was added to the project with the "Luxury Score" algorithm.
+    4. **User Experience:** The project was transformed into a web application that appeals to end users.
+    5. **Code Quality:** Modular structure, logging and error handling were used.
     """
     )
     st.write("---")
-    st.success("Projemin sunumu burada sona ermiştir. Dinlediğin için teşekkür ederim! 👏")
-    if st.button("Kutlama Yap 🎉"):
+    st.success("My project presentation ends here. Thank you for listening! 👏")
+    if st.button("Celebrate 🎉"):
         st.balloons()
