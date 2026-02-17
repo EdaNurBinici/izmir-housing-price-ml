@@ -26,6 +26,12 @@ wheels/
 # Model files (large files - regenerate with model_egitim.py)
 *.pkl
 
+# Artifacts directory (generated files)
+artifacts/models/*.pkl
+artifacts/encoders/*.pkl
+artifacts/metrics/*.pkl
+artifacts/metrics/*.json
+
 # Temporary files
 *.tmp
 *.temp
@@ -53,6 +59,11 @@ Thumbs.db
 logs/
 *.log
 
+# Data files (keep structure, ignore large files)
+data/raw/*.csv
+data/processed/*.csv
+!data/data_cleaned.csv
+
 # Test coverage
 .coverage
 htmlcov/
@@ -65,3 +76,9 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# Pre-commit
+.pre-commit-config.yaml.bak
