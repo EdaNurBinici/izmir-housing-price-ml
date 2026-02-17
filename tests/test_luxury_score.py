@@ -25,13 +25,13 @@ class TestLuxuryScoreCalculator:
         """Ultra lüks konut testi"""
         result = self.calculator.calculate(fiyat=25000000, m2=400, ilce="Çeşme", tip="Villa", yas=0)
         assert result["skor"] >= 85
-        assert result["kategori"] == "Ultra Lüks ⭐"
+        assert result["kategori"] == "Ultra Luxury ⭐"
 
     def test_standard_property(self):
         """Standart konut testi"""
         result = self.calculator.calculate(fiyat=2000000, m2=100, ilce="Buca", tip="Daire", yas=20)
         assert result["skor"] < 45
-        assert result["kategori"] == "Standart"
+        assert result["kategori"] == "Standard"
 
     def test_score_range(self):
         """Skor aralığı testi"""

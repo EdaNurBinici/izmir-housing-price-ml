@@ -440,10 +440,10 @@ elif menu == "5. Model Performance":
     c1, c2, c3 = st.columns(3)
     c1.metric("R² Score (Accuracy)", f"{r2_degeri:.3f}", yorum, delta_color=renk)
     c2.metric(
-        "MAE (Error)", f"{int(metrikler.get('MAE (Ortalama Hata)', 0)):,} TL", delta_color="inverse"
+        "MAE (Error)", f"{int(metrikler.get('MAE (Ortalama Hata)', metrikler.get('MAE', 0))):,} TL", delta_color="inverse"
     )
     c3.metric(
-        "RMSE", f"{int(metrikler.get('RMSE (Kök Ortalama Hata)', 0)):,} TL", delta_color="inverse"
+        "RMSE", f"{int(metrikler.get('RMSE (Kök Ortalama Hata)', metrikler.get('RMSE', 0))):,} TL", delta_color="inverse"
     )
 
     st.divider()
@@ -460,26 +460,32 @@ elif menu == "5. Model Performance":
 
     try:
         grafik_verisi = model_loader.onem_duzeyleri.copy()
+        # Use English column names for display (support both Turkish and English saved columns)
+        col_feature = "Özellik" if "Özellik" in grafik_verisi.columns else "Feature"
+        col_importance = "Önem" if "Önem" in grafik_verisi.columns else "Importance"
+        grafik_verisi = grafik_verisi.rename(columns={col_feature: "Feature", col_importance: "Importance"})
 
-        def isim_duzelt(metin: str) -> str:
-            """Corrects feature names"""
-            if "district_" in metin:
-                return metin.replace("district_", "") + " District"
-            elif "left_" in metin:
-                return metin.replace("left_", "") + " (Property Type)"
-            elif metin == "area":
+        def feature_label(metin: str) -> str:
+            """Corrects feature names to English"""
+            if "district_" in str(metin):
+                return str(metin).replace("district_", "") + " District"
+            elif "left_" in str(metin):
+                return str(metin).replace("left_", "") + " (Property Type)"
+            elif metin == "area" or "Metrekare" in str(metin) or "metrekare" in str(metin).lower():
                 return "Area (m²)"
-            elif metin == "age":
+            elif metin == "age" or "Bina Yaşı" in str(metin) or "Yaşı" in str(metin):
                 return "Building Age"
-            elif metin == "toplam_oda":
+            elif metin == "toplam_oda" or "Oda Sayısı" in str(metin):
                 return "Room Count"
-            elif metin == "ilce_skoru":
+            elif metin == "ilce_skoru" or "İlçe Değeri" in str(metin) or "District" in str(metin):
                 return "District Value"
-            return metin
+            if "Çeşme" in str(metin) or "İlçe:" in str(metin):
+                return "District: Cesme"
+            return str(metin)
 
-        if "Özellik" in grafik_verisi.columns:
-            grafik_verisi["Özellik"] = grafik_verisi["Özellik"].apply(isim_duzelt)
-            st.bar_chart(grafik_verisi.set_index("Özellik"))
+        if "Feature" in grafik_verisi.columns:
+            grafik_verisi["Feature"] = grafik_verisi["Feature"].apply(feature_label)
+            st.bar_chart(grafik_verisi.set_index("Feature"))
         else:
             st.write("Feature importance chart is not available.")
     except Exception as e:

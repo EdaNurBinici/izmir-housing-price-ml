@@ -1,6 +1,6 @@
-# İzmir Konut Projesi - Yapılandırma Dosyası
+# Izmir Housing Project - Configuration
 
-# Veri Dosyaları
+# Data files
 data:
   raw_data: "data/processed/data_cleaned.csv"
   model_path: "artifacts/models/izmir_model.pkl"
@@ -10,19 +10,19 @@ data:
   onem_duzeyleri_path: "artifacts/metrics/model_onem_duzeyleri.pkl"
   ilce_skorlari_path: "artifacts/encoders/ilce_skorlari.pkl"
 
-# Veri Temizleme Parametreleri
+# Data cleaning parameters
 data_cleaning:
   price_min: 100000
   price_max: 50000000
   area_min: 20
   area_max: 1000
-  # Model eğitimi için daha dar filtreler
+  # Stricter filters for model training
   training_price_min: 300000
   training_price_max: 35000000
   training_area_min: 40
   training_area_max: 450
 
-# Model Parametreleri
+# Model parameters
 model:
   algorithm: "HistGradientBoostingRegressor"
   test_size: 0.2
@@ -32,7 +32,7 @@ model:
   max_depth: 10
   l2_regularization: 0.1
 
-# Lüks Skoru Parametreleri
+# Luxury score parameters
 luxury_score:
   price_thresholds:
     ultra_luxury: 20000000
@@ -65,13 +65,13 @@ luxury_score:
     very_old: -10
     ancient: -15
 
-# Streamlit Ayarları
+# Streamlit settings
 streamlit:
-  page_title: "İzmir Konut Projesi Sunumu"
+  page_title: "Izmir Housing Price Prediction - Presentation"
   layout: "wide"
   sidebar_state: "expanded"
 
-# Logging Ayarları
+# Logging settings
 logging:
   level: "INFO"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -79,10 +79,10 @@ logging:
   max_bytes: 10485760  # 10MB
   backup_count: 5
 
-# Proje Bilgileri
+# Project info
 project:
-  name: "İzmir Konut Fiyat Tahmin ve Lüks Analiz Sistemi"
+  name: "Izmir Housing Price Prediction and Luxury Analysis System"
   authors:
     - "Eda Nur BİNİCİ"
-  course: "Yapay Zekaya Giriş"
+  course: "Introduction to Artificial Intelligence"
   version: "2.0.0"

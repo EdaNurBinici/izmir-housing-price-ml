@@ -227,17 +227,17 @@ class ModelTrainer:
         metrikler_path = base_path / self.config.get_data_path("metrikler_path")
         joblib.dump(metrikler, metrikler_path)
 
-        # Önem düzeyleri (basit versiyon)
+        # Feature importance (simple version, English labels for UI)
         onemli_ozellikler = pd.DataFrame(
             {
-                "Özellik": [
-                    "Metrekare (m2)",
-                    "İlçe Değeri",
-                    "Bina Yaşı",
-                    "Oda Sayısı",
-                    "İlçe: Çeşme",
+                "Feature": [
+                    "Area (m²)",
+                    "District Value",
+                    "Building Age",
+                    "Room Count",
+                    "District: Cesme",
                 ],
-                "Önem": [0.40, 0.30, 0.15, 0.10, 0.05],
+                "Importance": [0.40, 0.30, 0.15, 0.10, 0.05],
             }
         )
         onem_path = base_path / self.config.get_data_path("onem_duzeyleri_path")

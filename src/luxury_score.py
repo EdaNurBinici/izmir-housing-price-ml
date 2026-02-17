@@ -52,32 +52,32 @@ class LuxuryScoreCalculator:
         # Price score
         fiyat_puan = self._calculate_price_score(fiyat)
         puan += fiyat_puan
-        detaylar["fiyat_puan"] = fiyat_puan
+        detaylar["price_score"] = fiyat_puan
 
         # Area score
         m2_puan = self._calculate_area_score(m2)
         puan += m2_puan
-        detaylar["m2_puan"] = m2_puan
+        detaylar["area_score"] = m2_puan
 
         # District score
         ilce_puan = self._calculate_district_score(ilce)
         puan += ilce_puan
-        detaylar["ilce_puan"] = ilce_puan
+        detaylar["district_score"] = ilce_puan
 
         # Property type score
         tip_puan = self._calculate_type_score(tip)
         puan += tip_puan
-        detaylar["tip_puan"] = tip_puan
+        detaylar["property_type_score"] = tip_puan
 
         # Age score
         yas_puan = self._calculate_age_score(yas)
         puan += yas_puan
-        detaylar["yas_puan"] = yas_puan
+        detaylar["building_age_score"] = yas_puan
 
         # Limit score to 0-100 range
         final_skor = min(100, max(0, puan))
 
-        # Determine category
+        # Determine category (English)
         kategori = self._get_category(final_skor)
 
         return {"skor": final_skor, "kategori": kategori, "detaylar": detaylar}
