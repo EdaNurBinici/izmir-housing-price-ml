@@ -8,6 +8,8 @@
 
 A machine learning-based system for predicting housing prices in Izmir, Turkey, with an integrated luxury scoring algorithm.
 
+> Originally developed for the "Introduction to Artificial Intelligence" course.
+
 ## ✨ Features
 
 - 🎯 **Modular Architecture:** Professional-grade code organization
@@ -22,8 +24,6 @@ A machine learning-based system for predicting housing prices in Izmir, Turkey, 
 ## 👤 Developer
 
 **Eda Nur Binici**
-
-**Course:** Introduction to Artificial Intelligence
 
 ## 🛠️ Technology Stack
 
