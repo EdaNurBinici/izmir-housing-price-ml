@@ -120,9 +120,7 @@ menu = st.sidebar.radio(
 
 st.sidebar.divider()
 project_info = config.get("project", {})
-authors = project_info.get("authors", [])
-author_text = "\n".join([f"**{author}**" for author in authors])
-st.sidebar.caption(f"Hazırlayanlar:\n{author_text}\n\nDers: {project_info.get('course', 'Yapay Zekaya Giriş')}")
+st.sidebar.caption(f"**Developer:** Eda Nur BİNİCİ\n\n**Course:** {project_info.get('course', 'Yapay Zekaya Giriş')}")
 
 # --- 1. BÖLÜM: PROJE HAKKINDA ---
 if menu == "1. Proje Hakkında & Amaç":

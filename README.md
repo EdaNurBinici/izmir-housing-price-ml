@@ -13,11 +13,9 @@ A machine learning-based system for predicting housing prices in Izmir, Turkey, 
 - ⚙️ **Configuration Management:** YAML-based configuration
 - ✅ **Testing Support:** Unit tests for code quality assurance
 
-## 👥 Project Team
+## 👤 Developer
 
-- **Eda Nur Binici**
-- **Nazlıcan Çağın**
-- **Beyza Bulut**
+**Eda Nur Binici**
 
 **Course:** Introduction to Artificial Intelligence
 

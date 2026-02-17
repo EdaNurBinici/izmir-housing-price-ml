@@ -84,7 +84,5 @@ project:
   name: "İzmir Konut Fiyat Tahmin ve Lüks Analiz Sistemi"
   authors:
     - "Eda Nur BİNİCİ"
-    - "Nazlıcan ÇAĞİN"
-    - "Beyza BULUT"
   course: "Yapay Zekaya Giriş"
   version: "2.0.0"
