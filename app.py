@@ -253,7 +253,12 @@ elif menu == "3. Advanced Data Analysis (EDA)":
     clean_df = data_processor.prepare_eda_data(model_loader.raw_df)
 
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📉 Price Analysis", "📏 Area & Regression", "🏙️ District Analysis", "🔥 Correlation Matrix"]
+        [
+            "📉 Price Analysis",
+            "📏 Area & Regression",
+            "🏙️ District Analysis",
+            "🔥 Correlation Matrix",
+        ]
     )
 
     with tab1:
@@ -479,7 +484,9 @@ elif menu == "5. Model Performance":
             st.write("Feature importance chart is not available.")
     except Exception as e:
         logger.warning(f"Chart creation error: {e}")
-        st.write("Due to model complexity, the feature importance chart cannot be displayed in this model.")
+        st.write(
+            "Due to model complexity, the feature importance chart cannot be displayed in this model."
+        )
 
 # --- SECTION 6: CONCLUSION ---
 elif menu == "6. Conclusion & Outcomes":
