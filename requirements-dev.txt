@@ -1,13 +1,7 @@
-# Development dependencies
-# Last updated: 2026-02-17
+﻿-r requirements.txt
 
--r requirements.txt
-
-# Code quality tools
 black==26.1.0
 isort==7.0.0
 ruff==0.15.1
 pre-commit==4.0.1
-
-# Type checking (optional)
 mypy==1.13.0
