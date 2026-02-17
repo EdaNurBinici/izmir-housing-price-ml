@@ -107,13 +107,22 @@ pre-commit install
 python model_egitim.py
 ```
 
-This generates model artifacts in the project root:
+This generates model artifacts in organized directories:
+
+**Models** (`artifacts/models/`):
 - `izmir_model.pkl` - Trained HistGradientBoostingRegressor
+
+**Encoders** (`artifacts/encoders/`):
 - `izmir_ilceler.pkl` - District encodings
 - `ev_tipleri.pkl` - Property type encodings
+- `ilce_skorlari.pkl` - District target encodings
+
+**Metrics** (`artifacts/metrics/`):
 - `model_metrikleri.pkl` - Performance metrics (R², MAE, RMSE)
 - `model_onem_duzeyleri.pkl` - Feature importance scores
-- `ilce_skorlari.pkl` - District target encodings
+
+**Data** (`data/processed/`):
+- `data_cleaned.csv` - Cleaned dataset ready for training
 
 #### 5. Launch the Application
 
@@ -175,12 +184,15 @@ izmir-housing-price-ml/
 │   └── test_luxury_score.py
 ├── data/                         # Data directory
 │   ├── raw/                      # Original data files
-│   ├── processed/                # Cleaned data files
-│   └── data_cleaned.csv          # Main dataset
+│   └── processed/                # Cleaned data files
+│       └── data_cleaned.csv      # Main dataset (6000+ records)
 ├── artifacts/                    # Model artifacts (generated)
-│   ├── models/                   # Trained models
-│   ├── encoders/                 # Encoders and transformers
-│   └── metrics/                  # Performance metrics
+│   ├── models/                   # Trained models (*.pkl)
+│   ├── encoders/                 # Encoders and transformers (*.pkl)
+│   └── metrics/                  # Performance metrics (*.pkl)
+├── docs/                         # Documentation
+│   ├── images/                   # Report graphics and visualizations
+│   └── README.md                 # Documentation guide
 ├── scripts/                      # Utility scripts
 │   ├── setup.ps1                 # Windows setup script
 │   ├── setup.sh                  # Linux/Mac setup script
@@ -195,8 +207,11 @@ izmir-housing-price-ml/
 ├── requirements-dev.txt          # Development dependencies
 ├── pyproject.toml                # Python project configuration
 ├── .pre-commit-config.yaml       # Pre-commit hooks configuration
+├── .gitattributes                # Git line ending configuration
 ├── Makefile                      # Development commands
 ├── .gitignore                    # Git ignore rules
+├── LICENSE                       # MIT License
+├── CONTRIBUTING.md               # Contribution guidelines
 └── README.md                     # This file
 ```
 
