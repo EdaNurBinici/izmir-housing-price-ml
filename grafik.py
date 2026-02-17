@@ -2,13 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from pathlib import Path
+
+# Create output directory
+output_dir = Path("docs/images")
+output_dir.mkdir(parents=True, exist_ok=True)
 
 # 1. Veriyi Yükle
 print("📊 Grafikler hazırlanıyor...")
 try:
-    df = pd.read_csv("data_cleaned.csv")
+    df = pd.read_csv("data/processed/data_cleaned.csv")
 except FileNotFoundError:
-    print("HATA: 'data_cleaned.csv' bulunamadı!")
+    print("HATA: 'data/processed/data_cleaned.csv' bulunamadı!")
     exit()
 
 # --- ÖN İŞLEME VE TEMİZLİK ---
@@ -27,7 +32,7 @@ sns.histplot(df["price"], kde=True, color="blue")
 plt.title("1. İzmir Konut Fiyat Dağılımı (Standart)")
 plt.xlabel("Fiyat (TL)")
 plt.ylabel("Ev Sayısı")
-plt.savefig("Rapor_Grafik_1_FiyatDagilimi.png")
+plt.savefig(output_dir / "Rapor_Grafik_1_FiyatDagilimi.png")
 plt.close()
 print("✅ 1. Grafik kaydedildi: Fiyat Dağılımı")
 
@@ -46,7 +51,7 @@ plt.title("2. Metrekare ve Fiyat İlişkisi (Regresyon Analizi)")
 plt.xlabel("Metrekare (m²)")
 plt.ylabel("Fiyat (TL)")
 plt.grid(True, linestyle="--", alpha=0.5)
-plt.savefig("Rapor_Grafik_2_M2_Fiyat.png")
+plt.savefig(output_dir / "Rapor_Grafik_2_M2_Fiyat.png")
 plt.close()
 print("✅ 2. Grafik kaydedildi: M2 - Fiyat İlişkisi (Regresyon)")
 
@@ -65,7 +70,7 @@ plt.xticks(rotation=45)
 plt.title("3. İzmir'in En Pahalı 10 İlçesi (Ortalama Fiyat)")
 plt.ylabel("Ortalama Fiyat (TL)")
 plt.tight_layout()
-plt.savefig("Rapor_Grafik_3_Ilceler.png")
+plt.savefig(output_dir / "Rapor_Grafik_3_Ilceler.png")
 plt.close()
 print("✅ 3. Grafik kaydedildi: İlçe Ortalamaları")
 
@@ -76,7 +81,7 @@ sns.histplot(np.log1p(df["price"]), kde=True, color="purple", bins=30)
 plt.title("4. Logaritmik Fiyat Dağılımı (Normal Dağılıma Yaklaşım)")
 plt.xlabel("Log(Fiyat)")
 plt.ylabel("Frekans")
-plt.savefig("Rapor_Grafik_4_LogFiyat.png")
+plt.savefig(output_dir / "Rapor_Grafik_4_LogFiyat.png")
 plt.close()
 print("✅ 4. Grafik kaydedildi: Logaritmik Dağılım")
 
@@ -91,7 +96,7 @@ plt.xticks(rotation=45, ha="right")
 plt.title("5. İlçelere Göre Fiyat Değişkenliği (Boxplot)")
 plt.ylabel("Fiyat (TL)")
 plt.tight_layout()
-plt.savefig("Rapor_Grafik_5_Boxplot.png")
+plt.savefig(output_dir / "Rapor_Grafik_5_Boxplot.png")
 plt.close()
 print("✅ 5. Grafik kaydedildi: İlçe Boxplot")
 
@@ -110,7 +115,7 @@ plt.xticks(rotation=45)
 plt.title("6. Metrekare Başına En Değerli İlçeler")
 plt.ylabel("m² Birim Fiyatı (TL/m²)")
 plt.tight_layout()
-plt.savefig("Rapor_Grafik_6_M2_Degeri.png")
+plt.savefig(output_dir / "Rapor_Grafik_6_M2_Degeri.png")
 plt.close()
 print("✅ 6. Grafik kaydedildi: m² Değeri")
 
@@ -125,7 +130,7 @@ sns.heatmap(
 )
 plt.title("7. Özellikler Arası Korelasyon Matrisi")
 plt.tight_layout()
-plt.savefig("Rapor_Grafik_7_Korelasyon.png")
+plt.savefig(output_dir / "Rapor_Grafik_7_Korelasyon.png")
 plt.close()
 print("✅ 7. Grafik kaydedildi: Isı Haritası (Matris)")
 

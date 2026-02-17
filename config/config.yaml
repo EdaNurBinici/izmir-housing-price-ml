@@ -2,13 +2,13 @@
 
 # Veri Dosyaları
 data:
-  raw_data: "data_cleaned.csv"
-  model_path: "izmir_model.pkl"
-  ilceler_path: "izmir_ilceler.pkl"
-  tipler_path: "ev_tipleri.pkl"
-  metrikler_path: "model_metrikleri.pkl"
-  onem_duzeyleri_path: "model_onem_duzeyleri.pkl"
-  ilce_skorlari_path: "ilce_skorlari.pkl"
+  raw_data: "data/processed/data_cleaned.csv"
+  model_path: "artifacts/models/izmir_model.pkl"
+  ilceler_path: "artifacts/encoders/izmir_ilceler.pkl"
+  tipler_path: "artifacts/encoders/ev_tipleri.pkl"
+  metrikler_path: "artifacts/metrics/model_metrikleri.pkl"
+  onem_duzeyleri_path: "artifacts/metrics/model_onem_duzeyleri.pkl"
+  ilce_skorlari_path: "artifacts/encoders/ilce_skorlari.pkl"
 
 # Veri Temizleme Parametreleri
 data_cleaning:

@@ -23,14 +23,16 @@ wheels/
 .installed.cfg
 *.egg
 
-# Model files (large files - regenerate with model_egitim.py)
-*.pkl
-
-# Artifacts directory (generated files)
+# Model files and artifacts (regenerate with model_egitim.py)
 artifacts/models/*.pkl
 artifacts/encoders/*.pkl
 artifacts/metrics/*.pkl
 artifacts/metrics/*.json
+
+# Keep directory structure
+!artifacts/models/.gitkeep
+!artifacts/encoders/.gitkeep
+!artifacts/metrics/.gitkeep
 
 # Temporary files
 *.tmp
@@ -48,21 +50,26 @@ tempCodeRunnerFile.*
 .DS_Store
 Thumbs.db
 
-# Graphics files (optional - uncomment if they take too much space)
-# *.png
-# *.jpg
+# Logs
+logs/*.log
+
+# Keep logs directory
+!logs/.gitkeep
 
 # Streamlit
 .streamlit/
 
-# Logs
-logs/
-*.log
-
-# Data files (keep structure, ignore large files)
+# Data files
 data/raw/*.csv
 data/processed/*.csv
-!data/data_cleaned.csv
+
+# Keep directory structure  
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Documentation images
+docs/images/*.png
+docs/images/*.jpg
 
 # Test coverage
 .coverage
