@@ -440,10 +440,14 @@ elif menu == "5. Model Performance":
     c1, c2, c3 = st.columns(3)
     c1.metric("R² Score (Accuracy)", f"{r2_degeri:.3f}", yorum, delta_color=renk)
     c2.metric(
-        "MAE (Error)", f"{int(metrikler.get('MAE (Ortalama Hata)', metrikler.get('MAE', 0))):,} TL", delta_color="inverse"
+        "MAE (Error)",
+        f"{int(metrikler.get('MAE (Ortalama Hata)', metrikler.get('MAE', 0))):,} TL",
+        delta_color="inverse",
     )
     c3.metric(
-        "RMSE", f"{int(metrikler.get('RMSE (Kök Ortalama Hata)', metrikler.get('RMSE', 0))):,} TL", delta_color="inverse"
+        "RMSE",
+        f"{int(metrikler.get('RMSE (Kök Ortalama Hata)', metrikler.get('RMSE', 0))):,} TL",
+        delta_color="inverse",
     )
 
     st.divider()
@@ -463,7 +467,9 @@ elif menu == "5. Model Performance":
         # Use English column names for display (support both Turkish and English saved columns)
         col_feature = "Özellik" if "Özellik" in grafik_verisi.columns else "Feature"
         col_importance = "Önem" if "Önem" in grafik_verisi.columns else "Importance"
-        grafik_verisi = grafik_verisi.rename(columns={col_feature: "Feature", col_importance: "Importance"})
+        grafik_verisi = grafik_verisi.rename(
+            columns={col_feature: "Feature", col_importance: "Importance"}
+        )
 
         def feature_label(metin: str) -> str:
             """Corrects feature names to English"""
