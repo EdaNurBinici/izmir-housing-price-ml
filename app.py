@@ -135,8 +135,8 @@ if menu == "1. About the Project & Objective":
         st.subheader("🎯 Project Objective")
         st.write(
             """
-        The main objective of this project is to develop an artificial intelligence-based system 
-        that predicts the market value of residential properties in Izmir based on their features 
+        The main objective of this project is to develop an artificial intelligence-based system
+        that predicts the market value of residential properties in Izmir based on their features
         (district, area, number of rooms, etc.) and analyzes the property's **'Luxury Status'**.
         """
         )
