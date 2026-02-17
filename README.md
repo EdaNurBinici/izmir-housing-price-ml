@@ -10,8 +10,6 @@ A machine learning-based system for predicting housing prices in Izmir, Turkey, 
 
 > Originally developed for the "Introduction to Artificial Intelligence" course.
 
-**Quick Overview:** ML-powered housing price predictor with 87%+ accuracy, custom luxury scoring algorithm, interactive Streamlit UI, and modular architecture with comprehensive logging and error handling.
-
 **Quick Overview:** ML-powered housing price predictor with 87%+ accuracy, custom luxury scoring algorithm, interactive Streamlit UI. Production-inspired architecture: modular structure, logging, and error handling.
 
 ## ✨ Features
@@ -84,15 +82,15 @@ cd izmir-housing-price-ml
 #### 2. Create Virtual Environment
 
 **Windows (PowerShell):**
-```powershell
+```bash
 python -m venv venv
-.\venv\Scripts\Activate.ps1
+.\venv\Scripts\activate
 ```
 
 **Windows (CMD):**
-```cmd
+```bash
 python -m venv venv
-venv\Scripts\activate.bat
+venv\Scripts\activate
 ```
 
 **Linux/Mac:**
