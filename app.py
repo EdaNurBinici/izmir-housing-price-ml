@@ -493,7 +493,7 @@ elif menu == "6. Sonuç & Kazanımlar":
     2. **Yüksek Doğruluk:** Gelişmiş algoritmalar ile başarılı tahminler elde edildi.
     3. **Özgün Katma Değer:** "Lüks Skoru" algoritması ile projeye farklı bir boyut kazandırıldı.
     4. **Kullanıcı Deneyimi:** Proje, son kullanıcıya hitap eden bir web uygulamasına dönüştürüldü.
-    5. **Kod Kalitesi:** Senior seviyesinde modüler yapı, logging ve error handling ile profesyonel bir proje oluşturuldu.
+    5. **Kod Kalitesi:** Modüler yapı, logging ve error handling kullanıldı.
     """
     )
     st.write("---")
