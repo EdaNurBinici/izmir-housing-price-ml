@@ -29,7 +29,7 @@ The custom-built algorithm evaluates properties beyond just price per square met
 
 ## 📸 Application Screenshots
 
-![Live Prediction App](docs/images/Live-Prediction-App.png)
+![Live Prediction App](docs/images/Live-Prediction-App.png?v=2)
 *Interactive Streamlit interface for real-time housing price predictions*
 
 ## 👤 Developer
