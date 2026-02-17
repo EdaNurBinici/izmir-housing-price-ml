@@ -365,23 +365,8 @@ Log files are stored in the `logs/` directory. The directory is created automati
 2. Review new metrics
 3. Adjust parameters in `config/config.yaml` if needed
 
-## 🙏 Acknowledgments
-
-We thank the open-source community for the libraries used in this project.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Contact
-
-For questions, please contact the project team or open an issue on GitHub.
-
 ---
 
 **Version:** 2.0.0  
 **Last Updated:** 2026
+
