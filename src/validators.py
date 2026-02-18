@@ -108,7 +108,9 @@ class InputValidator:
 
         # Living room count check
         if not isinstance(salon, int) or salon < self.salon_min or salon > self.salon_max:
-            errors.append(f"Number of living rooms must be between {self.salon_min}-{self.salon_max}")
+            errors.append(
+                f"Number of living rooms must be between {self.salon_min}-{self.salon_max}"
+            )
 
         # Building age check
         if not isinstance(yas, int) or yas < self.age_min or yas > self.age_max:
