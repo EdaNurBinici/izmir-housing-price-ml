@@ -1,5 +1,5 @@
 """
-Logging sistemi kurulum modülü
+Logging system setup module
 """
 
 import logging
@@ -17,23 +17,23 @@ def setup_logging(
     backup_count: int = 5,
 ) -> None:
     """
-    Logging sistemini yapılandırır
+    Configures the logging system
 
     Args:
-        log_level: Log seviyesi (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-        log_format: Log formatı
-        log_file: Log dosyası yolu (None ise sadece console)
-        max_bytes: Log dosyası maksimum boyutu
-        backup_count: Yedek log dosyası sayısı
+        log_level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        log_format: Log format
+        log_file: Log file path (None for console only)
+        max_bytes: Maximum log file size
+        backup_count: Number of backup log files
     """
-    # Log seviyesini ayarla
+    # Set log level
     level = getattr(logging, log_level.upper(), logging.INFO)
 
-    # Root logger'ı yapılandır
+    # Configure root logger
     root_logger = logging.getLogger()
     root_logger.setLevel(level)
 
-    # Mevcut handler'ları temizle
+    # Clear existing handlers
     root_logger.handlers.clear()
 
     # Console handler
@@ -43,7 +43,7 @@ def setup_logging(
     console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
 
-    # File handler (eğer belirtilmişse)
+    # File handler (if specified)
     if log_file:
         log_path = Path(log_file)
         log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -56,15 +56,15 @@ def setup_logging(
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
 
-    logging.info("Logging sistemi başlatıldı")
+    logging.info("Logging system initialized")
 
 
 def get_logger(name: str) -> logging.Logger:
     """
-    Belirtilen isimle logger döndürür
+    Returns a logger with the specified name
 
     Args:
-        name: Logger adı
+        name: Logger name
 
     Returns:
         Logger instance

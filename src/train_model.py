@@ -1,5 +1,5 @@
 """
-Model eğitim modülü - Senior seviyesinde refactor edilmiş versiyon
+Model training module - Senior-level refactored version
 """
 
 from pathlib import Path
@@ -21,20 +21,20 @@ from .data_processor import DataProcessor
 from .exceptions import DataLoadError
 from .logger_setup import get_logger, setup_logging
 
-# Logging'i başlat
+# Initialize logging
 setup_logging()
 logger = get_logger(__name__)
 
 
 class ModelTrainer:
-    """Model eğitim sınıfı"""
+    """Model training class"""
 
     def __init__(self, config_path: str = "config/config.yaml"):
         """
-        Model trainer'ı başlatır
+        Initializes the model trainer
 
         Args:
-            config_path: Config dosyası yolu
+            config_path: Config file path
         """
         self.config = ConfigLoader(config_path)
         self.data_processor = DataProcessor(self.config)
@@ -43,13 +43,13 @@ class ModelTrainer:
 
     def load_data(self) -> pd.DataFrame:
         """
-        Veriyi yükler
+        Loads the data
 
         Returns:
-            Ham veri DataFrame
+            Raw data DataFrame
 
         Raises:
-            DataLoadError: Veri yükleme hatası
+            DataLoadError: Data loading error
         """
         try:
             data_path = self.config.get_data_path("raw_data")
@@ -58,61 +58,61 @@ class ModelTrainer:
             if not file_path.exists():
                 file_path = Path(__file__).parent.parent / data_path
                 if not file_path.exists():
-                    raise FileNotFoundError(f"Veri dosyası bulunamadı: {data_path}")
+                    raise FileNotFoundError(f"Data file not found: {data_path}")
 
-            logger.info(f"Veri yükleniyor: {file_path}")
+            logger.info(f"Loading data: {file_path}")
             df = pd.read_csv(file_path)
-            logger.info(f"Veri yüklendi: {len(df)} satır")
+            logger.info(f"Data loaded: {len(df)} rows")
             return df
 
         except Exception as e:
-            logger.error(f"Veri yükleme hatası: {e}")
-            raise DataLoadError(f"Veri yüklenemedi: {e}")
+            logger.error(f"Data loading error: {e}")
+            raise DataLoadError(f"Data could not be loaded: {e}")
 
     def prepare_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
         """
-        Veriyi model eğitimi için hazırlar
+        Prepares data for model training
 
         Args:
-            df: Ham veri DataFrame
+            df: Raw data DataFrame
 
         Returns:
-            X (features) ve y (target) tuple'ı
+            X (features) and y (target) tuple
         """
-        logger.info("Veri hazırlanıyor...")
+        logger.info("Preparing data...")
 
-        # Veriyi temizle
+        # Clean data
         df = self.data_processor.clean_data(df, for_training=True)
 
-        # Gerekli sütunları oluştur
+        # Create required columns
         if "room" in df.columns and "salon" in df.columns:
             df["toplam_oda"] = df["room"] + df["salon"]
 
-        # Gereksiz sütunları kaldır
+        # Remove unnecessary columns
         df = df.drop(columns=["province", "room", "salon"], errors="ignore")
 
-        # Target encoding için ilçe skorunu hesapla
+        # Calculate district score for target encoding
         df["birim_fiyat"] = df["price"] / df["area"]
         ilce_degerleri = df.groupby("district")["birim_fiyat"].median()
         df["ilce_skoru"] = df["district"].map(ilce_degerleri)
         df = df.drop(columns=["birim_fiyat"])
 
-        # X ve y'yi ayır
+        # Separate X and y
         X = df.drop("price", axis=1)
         y = df["price"]
 
-        logger.info(f"Hazırlanan veri: {len(X)} satır, {len(X.columns)} özellik")
+        logger.info(f"Data prepared: {len(X)} rows, {len(X.columns)} features")
 
         return X, y, ilce_degerleri
 
     def build_pipeline(self) -> Pipeline:
         """
-        Model pipeline'ını oluşturur
+        Builds the model pipeline
 
         Returns:
             Sklearn Pipeline
         """
-        logger.info("Model pipeline'ı oluşturuluyor...")
+        logger.info("Building model pipeline...")
 
         model_config = self.config.get_model_config()
 
@@ -158,16 +158,16 @@ class ModelTrainer:
 
     def train(self, X: pd.DataFrame, y: pd.Series) -> Dict[str, float]:
         """
-        Modeli eğitir
+        Trains the model
 
         Args:
             X: Feature matrix
             y: Target vector
 
         Returns:
-            Model metrikleri
+            Model metrics
         """
-        logger.info("Model eğitiliyor...")
+        logger.info("Training model...")
 
         test_size = self.config.get_model_config().get("test_size", 0.2)
         random_state = self.config.get_model_config().get("random_state", 42)
@@ -178,7 +178,7 @@ class ModelTrainer:
 
         self.pipeline.fit(X_train, y_train)
 
-        # Tahmin ve metrikler
+        # Predictions and metrics
         y_pred = self.pipeline.predict(X_test)
         r2 = r2_score(y_test, y_pred)
         mae = mean_absolute_error(y_test, y_pred)
@@ -186,7 +186,7 @@ class ModelTrainer:
 
         metrikler = {"R2 Skoru": r2, "MAE (Ortalama Hata)": mae, "RMSE (Kök Ortalama Hata)": rmse}
 
-        logger.info(f"Model eğitildi - R2: {r2:.3f}, MAE: {int(mae):,} TL")
+        logger.info(f"Model trained - R2: {r2:.3f}, MAE: {int(mae):,} TL")
 
         return metrikler
 
@@ -198,32 +198,32 @@ class ModelTrainer:
         ilce_degerleri: pd.Series,
     ) -> None:
         """
-        Model ve yardımcı dosyaları kaydeder
+        Saves model and auxiliary files
 
         Args:
-            pipeline: Eğitilmiş pipeline
-            X: Feature matrix (ilçe ve tip listeleri için)
-            metrikler: Model metrikleri
-            ilce_degerleri: İlçe skorları
+            pipeline: Trained pipeline
+            X: Feature matrix (for district and type lists)
+            metrikler: Model metrics
+            ilce_degerleri: District scores
         """
-        logger.info("Model dosyaları kaydediliyor...")
+        logger.info("Saving model files...")
 
         base_path = Path(__file__).parent.parent
 
-        # Model kaydet
+        # Save model
         model_path = base_path / self.config.get_data_path("model_path")
         joblib.dump(pipeline, model_path)
-        logger.info(f"Model kaydedildi: {model_path}")
+        logger.info(f"Model saved: {model_path}")
 
-        # İlçe listesi
+        # District list
         ilceler_path = base_path / self.config.get_data_path("ilceler_path")
         joblib.dump(sorted(X["district"].unique().tolist()), ilceler_path)
 
-        # Ev tipleri
+        # Property types
         tipler_path = base_path / self.config.get_data_path("tipler_path")
         joblib.dump(sorted(X["left"].unique().tolist()), tipler_path)
 
-        # Metrikler
+        # Metrics
         metrikler_path = base_path / self.config.get_data_path("metrikler_path")
         joblib.dump(metrikler, metrikler_path)
 
@@ -243,50 +243,50 @@ class ModelTrainer:
         onem_path = base_path / self.config.get_data_path("onem_duzeyleri_path")
         joblib.dump(onemli_ozellikler, onem_path)
 
-        # İlçe skorları
+        # District scores
         ilce_skor_path = base_path / self.config.get_data_path("ilce_skorlari_path")
         joblib.dump(ilce_degerleri, ilce_skor_path)
 
-        logger.info("Tüm dosyalar başarıyla kaydedildi")
+        logger.info("All files saved successfully")
 
     def run(self) -> None:
-        """Tam eğitim sürecini çalıştırır"""
+        """Runs the complete training process"""
         try:
             logger.info("=" * 50)
-            logger.info("Model eğitim süreci başlatılıyor...")
+            logger.info("Starting model training process...")
             logger.info("=" * 50)
 
-            # Veriyi yükle
+            # Load data
             df = self.load_data()
 
-            # Veriyi hazırla
+            # Prepare data
             X, y, ilce_degerleri = self.prepare_data(df)
 
-            # Pipeline oluştur
+            # Build pipeline
             pipeline = self.build_pipeline()
 
-            # Modeli eğit
+            # Train model
             metrikler = self.train(X, y)
 
-            # Sonuçları yazdır
+            # Print results
             print("-" * 50)
-            print(f"🎯 R2 SKORU: {metrikler['R2 Skoru']:.3f}")
+            print(f"🎯 R2 SCORE: {metrikler['R2 Skoru']:.3f}")
             print(f"📉 MAE: {int(metrikler['MAE (Ortalama Hata)']):,} TL")
             print(f"📊 RMSE: {int(metrikler['RMSE (Kök Ortalama Hata)']):,} TL")
             print("-" * 50)
 
-            # Modeli kaydet
+            # Save model
             self.save_model(pipeline, X, metrikler, ilce_degerleri)
 
-            logger.info("Model eğitim süreci tamamlandı!")
+            logger.info("Model training process completed!")
 
         except Exception as e:
-            logger.error(f"Eğitim hatası: {e}")
+            logger.error(f"Training error: {e}")
             raise
 
 
 def main():
-    """Ana fonksiyon"""
+    """Main function"""
     trainer = ModelTrainer()
     trainer.run()
 

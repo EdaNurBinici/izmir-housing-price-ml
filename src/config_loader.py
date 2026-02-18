@@ -1,5 +1,5 @@
 """
-Yapılandırma dosyası yükleme modülü
+Configuration file loading module
 """
 
 import logging
@@ -16,43 +16,43 @@ class ConfigLoader:
 
     def __init__(self, config_path: str = "config/config.yaml"):
         """
-        Config loader'ı başlatır
+        Initializes the config loader
 
         Args:
-            config_path: Config dosyasının yolu
+            config_path: Path to config file
         """
         self.config_path = config_path
         self.config: Dict[str, Any] = {}
         self._load_config()
 
     def _load_config(self) -> None:
-        """Config dosyasını yükler"""
+        """Loads the config file"""
         try:
             config_file = Path(self.config_path)
             if not config_file.exists():
-                # Proje root'undan dene
+                # Try from project root
                 config_file = Path(__file__).parent.parent / self.config_path
                 if not config_file.exists():
-                    raise FileNotFoundError(f"Config dosyası bulunamadı: {self.config_path}")
+                    raise FileNotFoundError(f"Config file not found: {self.config_path}")
 
             with open(config_file, encoding="utf-8") as f:
                 self.config = yaml.safe_load(f)
 
-            logger.info(f"Config dosyası başarıyla yüklendi: {self.config_path}")
+            logger.info(f"Configuration loaded successfully: {self.config_path}")
         except Exception as e:
-            logger.error(f"Config yükleme hatası: {e}")
+            logger.error(f"Configuration loading error: {e}")
             raise
 
     def get(self, key: str, default: Any = None) -> Any:
         """
-        Config değerini alır (nested key'ler için nokta notasyonu)
+        Gets config value (dot notation for nested keys)
 
         Args:
-            key: Config anahtarı (örn: "model.max_iter")
-            default: Varsayılan değer
+            key: Config key (e.g., "model.max_iter")
+            default: Default value
 
         Returns:
-            Config değeri
+            Config value
         """
         keys = key.split(".")
         value = self.config
@@ -68,13 +68,13 @@ class ConfigLoader:
         return value
 
     def get_data_path(self, key: str) -> str:
-        """Data dosya yolu alır"""
+        """Gets data file path"""
         return self.get(f"data.{key}", "")
 
     def get_model_config(self) -> Dict[str, Any]:
-        """Model yapılandırmasını döndürür"""
+        """Returns model configuration"""
         return self.get("model", {})
 
     def get_cleaning_config(self) -> Dict[str, Any]:
-        """Veri temizleme yapılandırmasını döndürür"""
+        """Returns data cleaning configuration"""
         return self.get("data_cleaning", {})

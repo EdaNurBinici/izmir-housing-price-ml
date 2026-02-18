@@ -1,5 +1,5 @@
 """
-Fiyat tahmin modülü
+Price prediction module
 """
 
 import logging
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class PricePredictor:
-    """Fiyat tahmini yapan sınıf"""
+    """Price prediction class"""
 
     def __init__(
         self,
@@ -25,7 +25,7 @@ class PricePredictor:
         validator: InputValidator,
     ):
         """
-        Predictor'ı başlatır
+        Initializes the predictor
 
         Args:
             model_loader: ModelLoader instance
@@ -40,24 +40,24 @@ class PricePredictor:
         self, ilce: str, ev_tipi: str, m2: float, oda: int, salon: int, yas: int
     ) -> Dict[str, Any]:
         """
-        Fiyat tahmini yapar ve lüks skorunu hesaplar
+        Makes price prediction and calculates luxury score
 
         Args:
-            ilce: İlçe adı
-            ev_tipi: Ev tipi
-            m2: Metrekare
-            oda: Oda sayısı
-            salon: Salon sayısı
-            yas: Bina yaşı
+            ilce: District name
+            ev_tipi: Property type
+            m2: Area in square meters
+            oda: Number of rooms
+            salon: Number of living rooms
+            yas: Building age
 
         Returns:
-            Tahmin sonuçları içeren dict
+            Dict containing prediction results
 
         Raises:
-            PredictionError: Tahmin hatası
+            PredictionError: Prediction error
         """
         try:
-            # Girdileri doğrula
+            # Validate inputs
             validated = self.validator.validate_input(
                 ilce=ilce,
                 ev_tipi=ev_tipi,
@@ -69,10 +69,10 @@ class PricePredictor:
                 valid_tipler=self.model_loader.ev_tipleri,
             )
 
-            # İlçe skorunu al
+            # Get district score
             ilce_skoru = self.model_loader.get_ilce_skoru(ilce)
 
-            # Model için input hazırla
+            # Prepare input for model
             input_data = pd.DataFrame(
                 {
                     "area": [validated["m2"]],
@@ -84,12 +84,12 @@ class PricePredictor:
                 }
             )
 
-            # Tahmin yap
-            logger.info(f"Tahmin yapılıyor: {validated}")
+            # Make prediction
+            logger.info(f"Making prediction: {validated}")
             tahmin = self.model_loader.model.predict(input_data)[0]
             fiyat = int(tahmin)
 
-            # Lüks skorunu hesapla
+            # Calculate luxury score
             luxury_result = self.luxury_calculator.calculate(
                 fiyat=fiyat,
                 m2=validated["m2"],
@@ -107,5 +107,5 @@ class PricePredictor:
             }
 
         except Exception as e:
-            logger.error(f"Tahmin hatası: {e}")
-            raise PredictionError(f"Tahmin yapılamadı: {e}")
+            logger.error(f"Prediction error: {e}")
+            raise PredictionError(f"Prediction failed: {e}")

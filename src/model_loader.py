@@ -1,5 +1,5 @@
 """
-Model yükleme ve yönetim modülü
+Model loading and management module
 """
 
 import logging
@@ -16,11 +16,11 @@ logger = logging.getLogger(__name__)
 
 
 class ModelLoader:
-    """Model ve veri dosyalarını yükleyen sınıf"""
+    """Model and data file loading class"""
 
     def __init__(self, config: ConfigLoader):
         """
-        Model loader'ı başlatır
+        Initializes the model loader
 
         Args:
             config: ConfigLoader instance
@@ -36,42 +36,42 @@ class ModelLoader:
 
     def load_all(self) -> bool:
         """
-        Tüm model ve veri dosyalarını yükler
+        Loads all model and data files
 
         Returns:
-            Yükleme başarılı ise True
+            True if loading successful
 
         Raises:
-            ModelLoadError: Model yükleme hatası
-            DataLoadError: Veri yükleme hatası
+            ModelLoadError: Model loading error
+            DataLoadError: Data loading error
         """
         try:
-            logger.info("Model ve veri dosyaları yükleniyor...")
+            logger.info("Loading model and data files...")
 
-            # Model yükle
+            # Model load
             model_path = self.config.get_data_path("model_path")
             self.model = self._load_model(model_path)
 
-            # İlçe listesi
+            # District list
             ilceler_path = self.config.get_data_path("ilceler_path")
             self.ilce_listesi = self._load_pickle(ilceler_path)
 
-            # Ev tipleri
+            # Property types
             tipler_path = self.config.get_data_path("tipler_path")
             self.ev_tipleri = self._load_pickle(tipler_path)
 
-            # Metrikler
+            # Metrics
             metrikler_path = self.config.get_data_path("metrikler_path")
             self.metrikler = self._load_pickle(metrikler_path)
 
-            # Önem düzeyleri
+            # Feature importance
             onem_path = self.config.get_data_path("onem_duzeyleri_path")
             self.onem_duzeyleri = self._load_pickle(onem_path)
 
-            # İlçe skorları
+            # District scores
             ilce_skor_path = self.config.get_data_path("ilce_skorlari_path")
             ilce_skor_data = self._load_pickle(ilce_skor_path)
-            # Series ise dict'e çevir
+            # Convert Series to dict if needed
             if hasattr(ilce_skor_data, "to_dict"):
                 self.ilce_skorlari = ilce_skor_data.to_dict()
             elif isinstance(ilce_skor_data, dict):
@@ -79,64 +79,64 @@ class ModelLoader:
             else:
                 self.ilce_skorlari = {}
 
-            # Ham veri
+            # Raw data
             raw_data_path = self.config.get_data_path("raw_data")
             self.raw_df = self._load_dataframe(raw_data_path)
 
-            logger.info("Tüm dosyalar başarıyla yüklendi")
+            logger.info("All files loaded successfully")
             return True
 
         except Exception as e:
-            logger.error(f"Dosya yükleme hatası: {e}")
+            logger.error(f"File loading error: {e}")
             raise
 
     def _load_model(self, path: str):
-        """Model dosyasını yükler"""
+        """Loads model file"""
         try:
             file_path = Path(path)
             if not file_path.exists():
-                # Proje root'undan dene
+                # Try from project root
                 file_path = Path(__file__).parent.parent / path
                 if not file_path.exists():
-                    raise FileNotFoundError(f"Model dosyası bulunamadı: {path}")
+                    raise FileNotFoundError(f"Model file not found: {path}")
 
-            logger.info(f"Model yükleniyor: {file_path}")
+            logger.info(f"Loading model: {file_path}")
             return joblib.load(file_path)
         except Exception as e:
-            logger.error(f"Model yükleme hatası: {e}")
-            raise ModelLoadError(f"Model yüklenemedi: {e}")
+            logger.error(f"Model loading error: {e}")
+            raise ModelLoadError(f"Model could not be loaded: {e}")
 
     def _load_pickle(self, path: str):
-        """Pickle dosyasını yükler"""
+        """Loads pickle file"""
         try:
             file_path = Path(path)
             if not file_path.exists():
                 file_path = Path(__file__).parent.parent / path
                 if not file_path.exists():
-                    raise FileNotFoundError(f"Dosya bulunamadı: {path}")
+                    raise FileNotFoundError(f"File not found: {path}")
 
             return joblib.load(file_path)
         except Exception as e:
-            logger.error(f"Pickle yükleme hatası ({path}): {e}")
-            raise ModelLoadError(f"Dosya yüklenemedi ({path}): {e}")
+            logger.error(f"Pickle loading error ({path}): {e}")
+            raise ModelLoadError(f"File could not be loaded ({path}): {e}")
 
     def _load_dataframe(self, path: str) -> pd.DataFrame:
-        """CSV dosyasını DataFrame olarak yükler"""
+        """Loads CSV file as DataFrame"""
         try:
             file_path = Path(path)
             if not file_path.exists():
                 file_path = Path(__file__).parent.parent / path
                 if not file_path.exists():
-                    raise FileNotFoundError(f"Veri dosyası bulunamadı: {path}")
+                    raise FileNotFoundError(f"Data file not found: {path}")
 
-            logger.info(f"Veri yükleniyor: {file_path}")
+            logger.info(f"Loading data: {file_path}")
             return pd.read_csv(file_path)
         except Exception as e:
-            logger.error(f"Veri yükleme hatası: {e}")
-            raise DataLoadError(f"Veri yüklenemedi: {e}")
+            logger.error(f"Data loading error: {e}")
+            raise DataLoadError(f"Data could not be loaded: {e}")
 
     def is_loaded(self) -> bool:
-        """Tüm dosyaların yüklenip yüklenmediğini kontrol eder"""
+        """Checks if all files are loaded"""
         return (
             self.model is not None
             and len(self.ilce_listesi) > 0
@@ -147,13 +147,13 @@ class ModelLoader:
 
     def get_ilce_skoru(self, ilce: str, default: float = 50000.0) -> float:
         """
-        İlçe skorunu döndürür
+        Returns district score
 
         Args:
-            ilce: İlçe adı
-            default: Varsayılan skor
+            ilce: District name
+            default: Default score
 
         Returns:
-            İlçe skoru
+            District score
         """
         return self.ilce_skorlari.get(ilce, default)
