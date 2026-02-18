@@ -53,12 +53,15 @@ The custom-built algorithm evaluates properties beyond just price per square met
 
 ## 🚀 Quick Start
 
+### Ready to Use - No Training Required! 🎉
+
+The repository includes pre-trained model files (~2MB) and cleaned dataset (~300KB), so you can run the application immediately after cloning.
+
 ### Option 1: Automated Setup (Recommended)
 
 **Windows (PowerShell):**
 ```powershell
 .\scripts\setup.ps1
-python model_egitim.py
 streamlit run app.py
 ```
 
@@ -66,7 +69,6 @@ streamlit run app.py
 ```bash
 chmod +x scripts/setup.sh
 ./scripts/setup.sh
-python model_egitim.py
 streamlit run app.py
 ```
 
@@ -114,7 +116,17 @@ pre-commit install
 
 > **Note:** All dependencies are pinned to exact versions for reproducibility. See [DEPENDENCY_MANAGEMENT.md](DEPENDENCY_MANAGEMENT.md) for update procedures.
 
-#### 4. Train the Model
+#### 4. Launch the Application
+
+```bash
+streamlit run app.py
+```
+
+The application opens automatically at `http://localhost:8501`
+
+### Optional: Retrain the Model
+
+If you want to retrain the model with your own parameters:
 
 ```bash
 python model_egitim.py
@@ -123,7 +135,7 @@ python model_egitim.py
 This generates model artifacts in organized directories:
 
 **Models** (`artifacts/models/`):
-- `izmir_model.pkl` - Trained HistGradientBoostingRegressor
+- `izmir_model.pkl` - Trained HistGradientBoostingRegressor (~1.6MB)
 
 **Encoders** (`artifacts/encoders/`):
 - `izmir_ilceler.pkl` - District encodings
@@ -135,15 +147,9 @@ This generates model artifacts in organized directories:
 - `model_onem_duzeyleri.pkl` - Feature importance scores
 
 **Data** (`data/processed/`):
-- `data_cleaned.csv` - Cleaned dataset ready for training
+- `data_cleaned.csv` - Cleaned dataset ready for training (~300KB)
 
-#### 5. Launch the Application
-
-```bash
-streamlit run app.py
-```
-
-The application opens automatically at `http://localhost:8501`
+> **Note:** Pre-trained models are included in the repository for immediate use. Retraining is optional.
 
 ## 🛠️ Development Commands
 
@@ -291,12 +297,20 @@ make format && make lint && make test
 
 ## 🐛 Troubleshooting
 
-### Model Files Not Found
+### Quick Start Issues
 
-If the application cannot find model files:
+The repository includes all necessary model files and data. If you encounter issues:
 
-1. Run `model_egitim.py`
-2. Ensure all `.pkl` files are in the project root directory
+1. Ensure you've installed dependencies: `pip install -r requirements.txt`
+2. Check that you're in the project root directory
+3. Verify Python version is 3.8 or higher
+
+### Model Files Not Found (Rare)
+
+If the application cannot find model files (this shouldn't happen as they're included):
+
+1. Run `python model_egitim.py` to regenerate
+2. Check that `artifacts/` directory exists with subdirectories
 
 ### Configuration File Error
 

@@ -23,11 +23,10 @@ wheels/
 .installed.cfg
 *.egg
 
-# Model files and artifacts (regenerate with model_egitim.py)
-artifacts/models/*.pkl
-artifacts/encoders/*.pkl
-artifacts/metrics/*.pkl
-artifacts/metrics/*.json
+# Model files and artifacts
+# Note: Model files are small (~2MB total) and included in repo for easy setup
+# Users can run the app immediately without training
+# To retrain: python model_egitim.py
 
 # Keep directory structure
 !artifacts/models/.gitkeep
@@ -60,8 +59,9 @@ logs/*.log
 .streamlit/
 
 # Data files
+# Note: Cleaned dataset (~300KB) is included for immediate use
+# Raw data files are excluded (can be large)
 data/raw/*.csv
-data/processed/*.csv
 
 # Keep directory structure  
 !data/raw/.gitkeep
