@@ -25,7 +25,7 @@ from src.model_loader import ModelLoader
 from src.predictor import PricePredictor
 from src.validators import InputValidator
 
-# Initialize logging
+# Initialize logging with rotation (5MB max, 3 backups)
 setup_logging(log_level="INFO", log_file="logs/app.log")
 logger = get_logger(__name__)
 

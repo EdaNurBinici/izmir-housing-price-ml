@@ -307,7 +307,13 @@ If you encounter config loading errors:
 
 ### Log Files
 
-Log files are stored in the `logs/` directory. The directory is created automatically if it doesn't exist.
+Log files are stored in the `logs/` directory with automatic rotation:
+- Maximum file size: 5MB
+- Backup files kept: 3
+- Old logs are automatically archived as `app.log.1`, `app.log.2`, `app.log.3`
+- This prevents disk space issues and keeps logs manageable
+
+The directory is created automatically if it doesn't exist.
 
 ## 📈 Development Notes
 

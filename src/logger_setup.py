@@ -13,18 +13,18 @@ def setup_logging(
     log_level: str = "INFO",
     log_format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     log_file: Optional[str] = None,
-    max_bytes: int = 10485760,
-    backup_count: int = 5,
+    max_bytes: int = 5242880,  # 5MB (5 * 1024 * 1024)
+    backup_count: int = 3,  # Keep 3 backup files
 ) -> None:
     """
-    Configures the logging system
+    Configures the logging system with rotation
 
     Args:
         log_level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         log_format: Log format
         log_file: Log file path (None for console only)
-        max_bytes: Maximum log file size
-        backup_count: Number of backup log files
+        max_bytes: Maximum log file size (default: 5MB)
+        backup_count: Number of backup log files (default: 3)
     """
     # Set log level
     level = getattr(logging, log_level.upper(), logging.INFO)
